@@ -61,7 +61,12 @@
       --t-slow:      400ms;
     }
 
-    html { scroll-behavior: smooth; font-size: 16px; }
+    html {
+      scroll-behavior: smooth;
+      font-size: 16px;
+      overflow-x: hidden;
+      max-width: 100%;
+    }
 
     body {
       font-family: var(--font-body);
@@ -69,6 +74,7 @@
       color: var(--text-1);
       line-height: 1.6;
       overflow-x: hidden;
+      max-width: 100%;
       -webkit-font-smoothing: antialiased;
     }
 
@@ -870,6 +876,183 @@
     .sticky-cta .btn { width: 100%; justify-content: center; }
 
     /* ================================================================
+       LEAD MODAL
+    ================================================================ */
+    .lead-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 2000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      padding-bottom: calc(16px + env(safe-area-inset-bottom));
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity var(--t-slow) var(--ease), visibility var(--t-slow);
+    }
+    .lead-modal.open {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
+    .lead-modal__backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,.72);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+    }
+    .lead-modal__panel {
+      position: relative;
+      width: min(440px, 100%);
+      max-height: min(90vh, 640px);
+      overflow-y: auto;
+      padding: 28px 24px 24px;
+      border-radius: var(--r-2xl);
+      border: 1px solid var(--border-md);
+      background: var(--bg-2);
+      box-shadow: 0 24px 80px rgba(0,0,0,.55);
+      transform: translateY(16px) scale(.98);
+      transition: transform var(--t-slow) var(--ease);
+    }
+    .lead-modal.open .lead-modal__panel {
+      transform: translateY(0) scale(1);
+    }
+    .lead-modal__close {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      width: 36px;
+      height: 36px;
+      border: none;
+      border-radius: var(--r-md);
+      background: rgba(255,255,255,.06);
+      color: var(--text-2);
+      font-size: 22px;
+      line-height: 1;
+      cursor: pointer;
+      transition: background var(--t), color var(--t);
+    }
+    .lead-modal__close:hover {
+      background: rgba(255,255,255,.1);
+      color: var(--text-1);
+    }
+    .lead-modal__title {
+      font-family: var(--font-head);
+      font-size: clamp(22px, 5vw, 26px);
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 8px;
+      padding-right: 32px;
+    }
+    .lead-modal__sub {
+      font-size: 14px;
+      color: var(--text-3);
+      margin-bottom: 22px;
+      line-height: 1.55;
+    }
+    .lead-modal__tg {
+      width: 100%;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    .lead-modal__or {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 4px 0 18px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: var(--text-4);
+    }
+    .lead-modal__or::before,
+    .lead-modal__or::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+    .lead-modal__phone-label {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-2);
+      margin-bottom: 10px;
+    }
+    .lead-modal__field {
+      width: 100%;
+      padding: 14px 16px;
+      margin-bottom: 10px;
+      border-radius: var(--r-lg);
+      border: 1px solid var(--border-md);
+      background: var(--bg-card);
+      color: var(--text-1);
+      font-family: var(--font-body);
+      font-size: 16px;
+      transition: border-color var(--t), box-shadow var(--t);
+    }
+    .lead-modal__field:focus {
+      outline: none;
+      border-color: var(--accent-border);
+      box-shadow: 0 0 0 3px var(--accent-faint);
+    }
+    .lead-modal__field::placeholder { color: var(--text-4); }
+    .lead-modal__error {
+      font-size: 13px;
+      color: #F87171;
+      min-height: 18px;
+      margin-bottom: 8px;
+    }
+    .lead-modal__submit {
+      width: 100%;
+      justify-content: center;
+    }
+    .lead-modal__note {
+      margin-top: 14px;
+      font-size: 12px;
+      color: var(--text-4);
+      text-align: center;
+      line-height: 1.5;
+    }
+    .lead-modal__field.invalid {
+      border-color: rgba(239,68,68,.5);
+    }
+    .lead-modal__success {
+      text-align: center;
+      padding: 8px 0 4px;
+    }
+    .lead-modal__success-icon {
+      width: 56px;
+      height: 56px;
+      margin: 0 auto 16px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--green-faint);
+      border: 1px solid var(--green-border);
+      color: var(--green);
+      font-size: 28px;
+      font-weight: 700;
+    }
+    .lead-modal__success .lead-modal__title { padding-right: 0; }
+    .lead-modal__success .lead-modal__sub { margin-bottom: 20px; }
+    .lead-modal__channel {
+      width: 100%;
+      justify-content: center;
+      margin-bottom: 12px;
+    }
+    .lead-modal__close-btn {
+      width: 100%;
+      justify-content: center;
+      margin-top: 4px;
+    }
+    .lead-modal [hidden] { display: none !important; }
+
+    /* ================================================================
        PROBLEM SECTION
     ================================================================ */
     .problems {
@@ -1046,7 +1229,7 @@
       padding: 64px;
     }
     @media (max-width: 767px) {
-      .offer__card { padding: 40px 24px; }
+      .offer__card { padding: 32px 20px; overflow: visible; }
     }
 
     /* top accent line */
@@ -1094,6 +1277,13 @@
       gap: 12px;
       font-size: 16px;
       color: var(--text-2);
+      min-width: 0;
+    }
+    .checklist__text {
+      flex: 1;
+      min-width: 0;
+      overflow-wrap: break-word;
+      word-break: break-word;
     }
     .checklist__ico {
       width: 20px; height: 20px;
@@ -1258,42 +1448,83 @@
     /* ================================================================
        MOBILE SPACING
     ================================================================ */
-    /* v3-mobile-spacing — если видите это в коде страницы, версия актуальная */
+    /* v5-mobile-fix — перенос текста + отступы */
     @media (max-width: 767px) {
       .container {
-        padding-left: max(36px, env(safe-area-inset-left));
-        padding-right: max(36px, env(safe-area-inset-right));
+        padding-left: max(24px, env(safe-area-inset-left));
+        padding-right: max(24px, env(safe-area-inset-right));
+        max-width: 100%;
+      }
+
+      h1, h2, h3, p, li, span {
+        overflow-wrap: break-word;
+        word-break: break-word;
       }
 
       h1 {
-        font-size: clamp(30px, 8.5vw, 42px);
+        font-size: clamp(28px, 8vw, 40px);
         line-height: 1.12;
+        letter-spacing: -0.02em;
       }
 
       h2 {
-        font-size: clamp(22px, 6vw, 30px);
-        line-height: 1.22;
+        font-size: clamp(21px, 5.8vw, 28px);
+        line-height: 1.25;
+        letter-spacing: -0.02em;
       }
 
-      .section-header {
-        margin-bottom: 52px;
-        padding-right: 4px;
+      .nav__inner {
+        gap: 10px;
+        min-width: 0;
       }
-      .section-header h2 { margin-bottom: 18px; }
-      .section-header p { font-size: 16px; line-height: 1.75; }
-
-      .nav { padding: 18px 0; }
-      .nav.stuck { padding: 12px 0; }
+      .logo {
+        font-size: 16px;
+        min-width: 0;
+        flex-shrink: 1;
+      }
+      .logo__mark { width: 30px; height: 30px; }
+      .nav__actions {
+        flex-shrink: 0;
+        gap: 8px;
+      }
+      .nav__actions .btn {
+        padding: 10px 12px;
+        font-size: 12px;
+        white-space: nowrap;
+      }
+      .nav { padding: 16px 0; }
+      .nav.stuck { padding: 10px 0; }
       .nav__mobile a { padding: 14px 8px; }
 
-      .hero { padding-top: 96px; }
-      .hero__inner { padding: 56px 0 72px; }
-      .hero__text { padding-right: 2px; }
+      .section-header {
+        margin-bottom: 48px;
+      }
+      .section-header h2 { margin-bottom: 16px; }
+      .section-header p { font-size: 16px; line-height: 1.75; }
 
-      .hero__badge { margin-bottom: 28px; }
-      .hero__h1 { margin-bottom: 28px; }
+      .hero {
+        min-height: auto;
+        overflow-x: clip;
+        overflow-y: visible;
+      }
+      .hero__inner {
+        padding: 56px 0 72px;
+        min-width: 0;
+      }
+      .hero__text,
+      .hero__content {
+        min-width: 0;
+        max-width: 100%;
+      }
+      .hero__h1,
       .hero__sub {
-        margin-bottom: 36px;
+        max-width: 100%;
+      }
+
+      .hero__badge { margin-bottom: 24px; }
+      .hero__h1 { margin-bottom: 24px; }
+      .hero__sub {
+        margin-bottom: 32px;
         font-size: 16px;
         line-height: 1.75;
       }
@@ -1301,8 +1532,8 @@
       .hero__actions {
         flex-direction: column;
         align-items: stretch;
-        gap: 16px;
-        margin-bottom: 48px;
+        gap: 14px;
+        margin-bottom: 40px;
       }
       .hero__actions .btn {
         width: 100%;
@@ -1310,89 +1541,66 @@
         white-space: normal;
         text-align: center;
       }
-      .hero__actions .btn-lg {
-        padding: 18px 20px;
-      }
 
       .hero__trust {
         flex-direction: column;
         align-items: flex-start;
-        gap: 20px;
-        padding-top: 36px;
+        gap: 16px;
+        padding-top: 32px;
       }
-      .hero__trust-text { font-size: 15px; line-height: 1.65; }
+      .hero__trust-text { max-width: 100%; }
 
-      .proof__item { padding: 40px 16px; }
-      .proof__label { font-size: 14px; line-height: 1.5; }
+      .proof__item { padding: 36px 16px; }
 
       .problems__grid,
       .cases__grid,
-      .steps__grid {
-        gap: 20px;
-      }
+      .steps__grid { gap: 16px; }
 
-      .pcard,
-      .case {
-        padding: 28px 24px;
-      }
-      .pcard h3,
-      .case h3 { margin-bottom: 14px; }
-      .pcard p,
-      .case p { margin-bottom: 20px; line-height: 1.7; }
-
-      .step { gap: 4px; }
-      .step h3 { margin-bottom: 12px; }
-      .step p { line-height: 1.7; padding-right: 4px; }
+      .pcard, .case, .step { padding: 24px 20px; min-width: 0; }
 
       .offer__card {
-        padding: 36px 24px;
-        margin: 0;
+        padding: 32px 24px;
+        overflow: visible;
+        max-width: 100%;
+        box-sizing: border-box;
       }
-      .offer__inner { gap: 40px; }
-      .checklist { gap: 18px; padding-right: 2px; }
-      .checklist li {
-        font-size: 15px;
-        line-height: 1.65;
-        padding-right: 4px;
+      .offer__inner,
+      .offer__left,
+      .offer__right {
+        min-width: 0;
+        max-width: 100%;
       }
-      .guarantee { padding: 22px 20px; gap: 18px; }
+      .offer__h2 { font-size: clamp(20px, 5.5vw, 26px); }
+      .checklist { gap: 16px; }
+      .checklist li { font-size: 15px; line-height: 1.6; }
+      .guarantee {
+        padding: 20px 18px;
+        min-width: 0;
+      }
+      .guarantee p { overflow-wrap: break-word; }
 
-      .faq__q { padding: 24px 20px; font-size: 15px; line-height: 1.45; }
-      .faq__a { padding: 0 20px 24px; line-height: 1.8; }
+      .faq__q { padding: 20px 18px; font-size: 15px; }
+      .faq__a { padding: 0 18px 20px; }
 
-      .footer { padding: 56px 0 40px; }
+      .footer { padding: 48px 0 36px; }
       .footer__top {
         flex-direction: column;
         align-items: flex-start;
-        gap: 28px;
-        padding-bottom: 36px;
-        margin-bottom: 36px;
+        gap: 24px;
       }
       .footer__bottom {
         flex-direction: column;
         align-items: flex-start;
-        gap: 16px;
-        line-height: 1.6;
+        gap: 12px;
       }
 
       .sticky-cta {
-        padding: 16px max(36px, env(safe-area-inset-left)) calc(16px + env(safe-area-inset-bottom)) max(36px, env(safe-area-inset-right));
-      }
-    }
-
-    @media (max-width: 380px) {
-      .container {
-        padding-left: max(32px, env(safe-area-inset-left));
-        padding-right: max(32px, env(safe-area-inset-right));
+        padding: 14px max(24px, env(safe-area-inset-left)) calc(14px + env(safe-area-inset-bottom)) max(24px, env(safe-area-inset-right));
       }
 
-      .nav__actions .btn {
-        padding: 10px 12px;
-        font-size: 12px;
+      .lead-modal__panel {
+        padding: 28px 22px 24px;
       }
-
-      .logo { font-size: 17px; }
-      .logo__mark { width: 30px; height: 30px; }
     }
   </style>
 </head>
@@ -1428,13 +1636,12 @@
         <button class="nav__burger" id="navBurger" aria-label="Открыть меню" aria-expanded="false" aria-controls="navMobile">
           <span></span><span></span><span></span>
         </button>
-        <a href="https://t.me/vnedriai_manager_bot?start=site" target="_blank" rel="noopener noreferrer"
-           class="btn btn-primary" aria-label="Записаться на бесплатный аудит в Telegram">
+        <button type="button" class="btn btn-primary js-open-lead-modal" aria-label="Записаться на бесплатный аудит">
           Получить аудит
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M5 12h14M12 5l7 7-7 7"/>
           </svg>
-        </a>
+        </button>
       </div>
 
     </div>
@@ -1482,13 +1689,12 @@
         </p>
 
         <div class="hero__actions reveal d3">
-          <a href="https://t.me/vnedriai_manager_bot?start=site" target="_blank" rel="noopener noreferrer"
-             class="btn btn-primary btn-lg">
+          <button type="button" class="btn btn-primary btn-lg js-open-lead-modal">
             Получить бесплатный аудит
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M5 12h14M12 5l7 7-7 7"/>
             </svg>
-          </a>
+          </button>
           <a href="#how" class="btn btn-ghost btn-lg">
             Как это работает
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -1784,27 +1990,27 @@
           <ul class="checklist" aria-label="Что входит в предложение">
             <li>
               <svg class="checklist__ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
-              Аудит процессов онлайн-школы — 30 минут, бесплатно
+              <span class="checklist__text">Аудит процессов онлайн-школы — 30 минут, бесплатно</span>
             </li>
             <li>
               <svg class="checklist__ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
-              Стратегия AI-внедрения с приоритизацией — бесплатно
+              <span class="checklist__text">Стратегия AI-внедрения с приоритизацией — бесплатно</span>
             </li>
             <li>
               <svg class="checklist__ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
-              Честное разделение: что сделать самим, что с нами
+              <span class="checklist__text">Честное разделение: что сделать самим, что с нами</span>
             </li>
             <li>
               <svg class="checklist__ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
-              Документ на руках — ваш навсегда, даже без сотрудничества
+              <span class="checklist__text">Документ на руках — ваш навсегда, даже без сотрудничества</span>
             </li>
             <li>
               <svg class="checklist__ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
-              Первое внедрение под ключ — за 3 рабочих дня
+              <span class="checklist__text">Первое внедрение под ключ — за 3 рабочих дня</span>
             </li>
             <li>
               <svg class="checklist__ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
-              Оплата только после подтверждения согласованных метрик
+              <span class="checklist__text">Оплата только после подтверждения согласованных метрик</span>
             </li>
           </ul>
         </div>
@@ -1822,16 +2028,15 @@
           </div>
 
           <div class="offer__cta">
-            <a href="https://t.me/vnedriai_manager_bot?start=site" target="_blank" rel="noopener noreferrer"
-               class="btn btn-primary btn-lg">
+            <button type="button" class="btn btn-primary btn-lg js-open-lead-modal">
               Записаться на бесплатный аудит
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
               </svg>
-            </a>
+            </button>
           </div>
 
-          <p class="offer__note">Без звонков и спама. Только Telegram — удобно и быстро.</p>
+          <p class="offer__note">Telegram или перезвоним по телефону — как вам удобнее.</p>
         </div>
 
       </div>
@@ -1963,13 +2168,64 @@
      STICKY MOBILE CTA
 ===================================================== -->
 <div class="sticky-cta" id="stickyCta" aria-hidden="true">
-  <a href="https://t.me/vnedriai_manager_bot?start=site" target="_blank" rel="noopener noreferrer"
-     class="btn btn-primary btn-lg">
+  <button type="button" class="btn btn-primary btn-lg js-open-lead-modal">
     Получить бесплатный аудит
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
       <path d="M5 12h14M12 5l7 7-7 7"/>
     </svg>
-  </a>
+  </button>
+</div>
+
+
+<!-- ====================================================
+     LEAD MODAL
+===================================================== -->
+<div class="lead-modal" id="leadModal" role="dialog" aria-modal="true" aria-labelledby="leadModalTitle" aria-hidden="true">
+  <div class="lead-modal__backdrop" data-lead-close tabindex="-1"></div>
+  <div class="lead-modal__panel">
+
+    <button type="button" class="lead-modal__close" data-lead-close aria-label="Закрыть">&times;</button>
+
+    <div id="leadStepChoice">
+      <h2 class="lead-modal__title" id="leadModalTitle">Бесплатный аудит онлайн-школы</h2>
+      <p class="lead-modal__sub">Выберите удобный способ — мы свяжемся и разберём вашу школу.</p>
+
+      <a href="https://t.me/vnedriai_manager_bot?start=site" target="_blank" rel="noopener noreferrer"
+         class="btn btn-primary btn-lg lead-modal__tg" id="leadTgBtn">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M22 2 11 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M22 2 15 22l-4-9-9-4 20-7z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Оставить заявку в Telegram
+      </a>
+
+      <div class="lead-modal__or">или</div>
+
+      <p class="lead-modal__phone-label">Хотите, чтобы мы перезвонили? Оставьте телефон:</p>
+      <form id="leadPhoneForm" novalidate>
+        <input type="tel" class="lead-modal__field" id="leadPhoneInput"
+               name="phone" inputmode="tel" autocomplete="tel"
+               placeholder="+7 (999) 123-45-67" aria-label="Номер телефона" required />
+        <p class="lead-modal__error" id="leadPhoneError" role="alert"></p>
+        <button type="submit" class="btn btn-ghost btn-lg lead-modal__submit" id="leadPhoneSubmit">
+          Перезвоните мне
+        </button>
+      </form>
+      <p class="lead-modal__note">Нажимая кнопку, вы соглашаетесь на обратный звонок по указанному номеру.</p>
+    </div>
+
+    <div class="lead-modal__success" id="leadStepSuccess" hidden>
+      <div class="lead-modal__success-icon" aria-hidden="true">✓</div>
+      <h2 class="lead-modal__title">Заявка оставлена!</h2>
+      <p class="lead-modal__sub">Мы свяжемся с вами в ближайшее время. Ожидайте.</p>
+      <a href="https://t.me/vnedrimai" target="_blank" rel="noopener noreferrer"
+         class="btn btn-primary btn-lg lead-modal__channel" id="leadChannelBtn">
+        Перейти в Telegram-канал
+      </a>
+      <button type="button" class="btn btn-ghost btn-lg" data-lead-close>Закрыть</button>
+    </div>
+
+  </div>
 </div>
 
 
@@ -1977,6 +2233,131 @@
      SCRIPTS
 ===================================================== -->
 <script>
+  /* ---- Site config ---- */
+  const VNEDRIAI = {
+    botUrl: 'https://t.me/vnedriai_manager_bot?start=site',
+    channelUrl: 'https://t.me/vnedrimai',
+    /* URL API бота для заявок по телефону (ngrok или ваш сервер), например:
+       'https://xxxx.ngrok-free.app/api/phone-lead' */
+    leadApiUrl: '',
+    leadApiSecret: ''
+  };
+
+  /* ---- LEAD MODAL ---- */
+  const leadModal = document.getElementById('leadModal');
+  const leadStepChoice = document.getElementById('leadStepChoice');
+  const leadStepSuccess = document.getElementById('leadStepSuccess');
+  const leadPhoneForm = document.getElementById('leadPhoneForm');
+  const leadPhoneInput = document.getElementById('leadPhoneInput');
+  const leadPhoneError = document.getElementById('leadPhoneError');
+  const leadPhoneSubmit = document.getElementById('leadPhoneSubmit');
+  let leadModalPrevFocus = null;
+
+  document.getElementById('leadTgBtn').href = VNEDRIAI.botUrl;
+  document.getElementById('leadChannelBtn').href = VNEDRIAI.channelUrl;
+
+  function normalizePhone(raw) {
+    const digits = raw.replace(/\D/g, '');
+    if (digits.length === 11 && digits.startsWith('8')) return '+7' + digits.slice(1);
+    if (digits.length === 10) return '+7' + digits;
+    if (digits.length === 11 && digits.startsWith('7')) return '+' + digits;
+    return null;
+  }
+
+  function formatPhoneDisplay(value) {
+    const digits = value.replace(/\D/g, '');
+    let d = digits;
+    if (d.startsWith('8')) d = '7' + d.slice(1);
+    if (!d.startsWith('7') && d.length) d = '7' + d;
+    d = d.slice(0, 11);
+    if (!d.length) return '';
+    let out = '+7';
+    if (d.length > 1) out += ' (' + d.slice(1, 4);
+    if (d.length >= 4) out += ') ' + d.slice(4, 7);
+    if (d.length >= 7) out += '-' + d.slice(7, 9);
+    if (d.length >= 9) out += '-' + d.slice(9, 11);
+    return out;
+  }
+
+  function openLeadModal() {
+    leadModalPrevFocus = document.activeElement;
+    leadStepChoice.hidden = false;
+    leadStepSuccess.hidden = true;
+    leadPhoneForm.reset();
+    leadPhoneError.textContent = '';
+    leadPhoneInput.classList.remove('invalid');
+    leadModal.classList.add('open');
+    leadModal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    setTimeout(() => document.getElementById('leadTgBtn').focus(), 100);
+  }
+
+  function closeLeadModal() {
+    leadModal.classList.remove('open');
+    leadModal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    if (leadModalPrevFocus && leadModalPrevFocus.focus) leadModalPrevFocus.focus();
+  }
+
+  document.querySelectorAll('.js-open-lead-modal').forEach(btn => {
+    btn.addEventListener('click', openLeadModal);
+  });
+
+  leadModal.querySelectorAll('[data-lead-close]').forEach(el => {
+    el.addEventListener('click', closeLeadModal);
+  });
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && leadModal.classList.contains('open')) closeLeadModal();
+  });
+
+  leadPhoneInput.addEventListener('input', () => {
+    const pos = leadPhoneInput.selectionStart;
+    leadPhoneInput.value = formatPhoneDisplay(leadPhoneInput.value);
+    leadPhoneInput.classList.remove('invalid');
+    leadPhoneError.textContent = '';
+  });
+
+  leadPhoneForm.addEventListener('submit', async e => {
+    e.preventDefault();
+    const phone = normalizePhone(leadPhoneInput.value);
+    if (!phone) {
+      leadPhoneInput.classList.add('invalid');
+      leadPhoneError.textContent = 'Введите корректный номер: +7 и 10 цифр';
+      leadPhoneInput.focus();
+      return;
+    }
+
+    if (!VNEDRIAI.leadApiUrl) {
+      leadPhoneError.textContent = 'Заявка по телефону временно недоступна. Используйте Telegram выше.';
+      return;
+    }
+
+    leadPhoneSubmit.disabled = true;
+    leadPhoneSubmit.textContent = 'Отправляем…';
+
+    try {
+      const headers = { 'Content-Type': 'application/json' };
+      if (VNEDRIAI.leadApiSecret) headers['X-Lead-Secret'] = VNEDRIAI.leadApiSecret;
+
+      const res = await fetch(VNEDRIAI.leadApiUrl, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({ phone, source: 'site' })
+      });
+
+      if (!res.ok) throw new Error('request_failed');
+
+      leadStepChoice.hidden = true;
+      leadStepSuccess.hidden = false;
+    } catch {
+      leadPhoneError.textContent = 'Не удалось отправить. Попробуйте Telegram или позже.';
+    } finally {
+      leadPhoneSubmit.disabled = false;
+      leadPhoneSubmit.textContent = 'Перезвоните мне';
+    }
+  });
+
   /* ---- NAV: scroll detection ---- */
   const nav = document.getElementById('mainNav');
   const stickyCta = document.getElementById('stickyCta');
